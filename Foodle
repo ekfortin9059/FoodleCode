@@ -1,0 +1,61 @@
+import random
+#game class
+class Foodle:
+    def __init__(self, difficulty):
+        self.difficulty = difficulty
+        self.words = {
+            "easy": ["potato", "banana", "orange", "carrot", "pepper", "tomato", "muffin", "salmon", "turkey", "butter"],
+            "medium": ["celery", "papaya", "churro", "squash", "salami", "radish", "hotdog", "peanut", "cherry", "garlic"],
+            "hard": ["sorbet", "fillet", "quinoa", "gnocci", "wasabi", "ginger", "chives", "sesame", "yogurt", "pastry"]
+        }
+        self.answer = self.choose_word()
+
+    def choose_word(self):
+        if self.difficulty in self.words:
+            return random.choice(self.words[self.difficulty])
+        else:
+            print("That's not a difficulty level :(  Please choose easy, medium, or hard.")
+            return None
+
+    def disp_attempt(self, used_letters):
+        display = ""
+        for letter in self.answer:
+            if letter in used_letters:
+                display += letter
+            else:
+                display += "_"
+        return display
+
+    def FoodleGame(self):
+        used_letters = []
+        attempts = 10
+
+        print("Welcome to Foodle! Try to guess the word.")
+        print(self.disp_attempt(used_letters))
+
+        while attempts > 0:
+            guess = input("Enter a letter: ").lower()
+
+            if len(guess) == 1 and guess.isalpha():
+                if guess in used_letters:
+                    print("You already guessed that letter. Try again.")
+                elif guess in self.answer:
+                    used_letters.append(guess)
+                    print(self.disp_attempt(used_letters))
+                else:
+                    attempts -= 1
+                    print(f"Wrong guess! {attempts} attempts remaining.")
+            else:
+                print("Invalid input. Please enter a single letter.")
+
+            if set(used_letters) == set(self.answer):
+                print("That's it! You got the word!")
+                break
+
+        if attempts == 0:
+            print(f"Sorry, you ran out of attempts. The word was {self.answer}.")
+
+
+difficulty_level = input("Choose difficulty (easy, medium, hard): ").lower()
+foodle_game = Foodle(difficulty_level)
+foodle_game.FoodleGame()
